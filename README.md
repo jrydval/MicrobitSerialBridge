@@ -68,7 +68,7 @@ which the gateway micro:bit then broadcasts via `radio.sendString` (or `sendNumb
 
 ### 1. Flash the gateway micro:bit
 
-Open [`microbit-serial-bridge.ts`](microbit-serial-bridge.ts) in the [MakeCode editor](https://makecode.microbit.org/) and flash it onto the micro:bit that will stay plugged in via USB. It shows receive activity on the top two rows of the LED display and send activity on the next two rows, plus a heartbeat blink once a second.
+Open [`microbit-serial-bridge.ts`](microbit-serial-bridge.ts) in the [MakeCode editor](https://makecode.microbit.org/) and flash it onto the micro:bit that will stay plugged in via USB. See [LED display](#led-display) below for what the lights mean.
 
 ### 2. Run the bridge
 
@@ -92,6 +92,22 @@ python3 test_receiver.py 8080
 ```
 
 Point `-webhook-url` (or `MICROBIT_WEBHOOK_URL`) at `http://localhost:8080` and every radio message the gateway hears will be printed as formatted JSON.
+
+## LED display
+
+The gateway micro:bit uses its 5×5 LED display as a simple activity monitor, split into three zones:
+
+```
+row 0  ●  ·  ·  ·  ·     ┐
+row 1  ·  ·  ·  ·  ·     ┘  receive  (radio → serial)
+row 2  ·  ·  ·  ·  ·     ┐
+row 3  ·  ·  ·  ·  ·     ┘  send     (serial → radio)
+row 4  ·  ·  ·  ·  ◆        heartbeat (blinks every second, proves the firmware is alive)
+```
+
+- **Rows 0–1 (receive):** each radio packet the gateway hears (and forwards to serial) toggles the next LED in a sweep across these two rows, so a busy radio network shows up as flickering across the top of the display.
+- **Rows 2–3 (send):** each line the gateway reads from serial (and broadcasts out over radio) toggles the next LED across these two rows in the same way — useful for confirming that commands sent from the Go bridge are actually reaching the micro:bit.
+- **Row 4, bottom-right pixel:** blinks once a second regardless of traffic, as a heartbeat to confirm the gateway is powered and the firmware hasn't hung.
 
 ## Configuration
 
