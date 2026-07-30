@@ -1,0 +1,11 @@
+# Build artifacts
+/microbit-serial-bridge
+
+# Local environment config
+.env
+
+# Claude Code local settings
+.claude/
+
+# macOS
+.DS_Store

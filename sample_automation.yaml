@@ -1,0 +1,33 @@
+alias: Microbit webhook bridge
+triggers:
+  - webhook_id: microbit-webhook-bridge
+    allowed_methods:
+      - POST
+    local_only: true
+    trigger: webhook
+conditions: []
+actions:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.json.payload == 'SOCKET1=1' }}"
+        sequence:
+          - action: switch.turn_on
+            target:
+              entity_id: switch.socket_1
+          - action: rest_command.microbit_send
+            data:
+              type: S
+              payload: "ON"
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.json.payload == 'SOCKET1=0' }}"
+        sequence:
+          - action: switch.turn_off
+            target:
+              entity_id: switch.socket_1
+          - action: rest_command.microbit_send
+            data:
+              type: S
+              payload: "OFF"
+mode: single

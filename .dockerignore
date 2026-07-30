@@ -1,0 +1,6 @@
+.claude
+.git
+microbit-serial-bridge
+receiver.py
+*.md
+.env

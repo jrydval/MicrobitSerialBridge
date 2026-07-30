@@ -1,0 +1,16 @@
+services:
+  microbit-webhook-bridge:
+    build: .
+    image: microbit-webhook-bridge
+    container_name: microbit-webhook-bridge
+    restart: unless-stopped
+    devices:
+      - "${SERIAL_PORT:-/dev/ttyACM0}:${SERIAL_PORT:-/dev/ttyACM0}"
+    ports:
+      - "${LISTEN_PORT:-8081}:8081"
+    environment:
+      - MICROBIT_WEBHOOK_URL=${MICROBIT_WEBHOOK_URL:-http://192.168.0.100:8123/api/webhook/microbit-webhook-bridge}
+    command:
+      - "-port=${SERIAL_PORT:-/dev/ttyACM0}"
+      - "-baud=${BAUD_RATE:-115200}"
+      - "-listen-addr=:8081"

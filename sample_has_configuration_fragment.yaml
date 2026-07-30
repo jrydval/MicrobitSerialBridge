@@ -1,0 +1,7 @@
+rest_command:
+  microbit_send:
+    url: "http://192.168.87.10:8081/"
+    method: POST
+    headers:
+      Content-Type: "application/json"
+    payload: '{"type": "{{ type }}", "payload": "{{ payload }}"}'
