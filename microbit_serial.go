@@ -256,10 +256,12 @@ func main() {
 	}
 	defer port.Close()
 
-	// Set the read timeout
-	err = port.SetReadTimeout(time.Second * 1)
+	// Scanner treats repeated timeout reads (0 bytes, nil error) as a broken
+	// io.Reader and aborts after 100 empty reads. Keep reads blocking instead;
+	// the HTTP server runs in a separate goroutine and remains responsive.
+	err = port.SetReadTimeout(serial.NoTimeout)
 	if err != nil {
-		log.Fatalf("Error setting timeout: %v", err)
+		log.Fatalf("Error disabling read timeout: %v", err)
 	}
 
 	// Start the HTTP server for receiving messages to be sent to the serial port
